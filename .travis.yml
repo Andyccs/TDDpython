@@ -6,3 +6,6 @@ script:
   - pip install -r requirements.txt
   - cd ./superlists
   - python manage.py test
+  - python manage.py runserver &
+  - sleep 5
+  - python functional_tests.py
