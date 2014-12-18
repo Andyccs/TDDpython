@@ -53,4 +53,8 @@ docs/_build/
 # PyBuilder
 target/
 
-superlists/db.sqlite3
+*/db.sqlite3
+
+# Coverall.io
+*/htmlcov/
+*/.coverage
