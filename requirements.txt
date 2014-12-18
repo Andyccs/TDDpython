@@ -1,3 +1,5 @@
 django==1.7
 selenium==2.44.0
 pip==1.5.6
+coveralls==0.5
+django-nose==1.3

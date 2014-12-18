@@ -4,15 +4,9 @@ python:
 
 install:
   - pip install -r requirements.txt
-  - pip install coveralls
-  # - pip install nose
 script:
   - cd ./superlists
-  - coverage run --source=lists ./manage.py test
-  # Uncomment below when you want to separate test into
-  # multiple file
-  # - nosetests --with-coverage
-  # - python manage.py test
+  - python manage.py test
 
 after_success:
   - coveralls
