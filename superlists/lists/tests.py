@@ -45,23 +45,12 @@ class HomePageTest(TestCase):
 		response = home_page(request)
 
 		self.assertEqual(response.status_code, 302)
-		self.assertEqual(response['location'],'/')
+		self.assertEqual(response['location'],'/lists/the-only-list-in-the-world/')
 
 	def test_home_page_only_saves_items_when_necessary(self):
 		request = HttpRequest()
 		home_page(request)
 		self.assertEqual(Item.objects.count(), 0)
-
-	def test_home_page_displays_all_list_items(self):
-		Item.objects.create(text='itemey 1')
-		Item.objects.create(text='itemey 2')
-
-		request = HttpRequest()
-		response = home_page(request)
-
-		self.assertIn('itemey 1',response.content.decode())
-		self.assertIn('itemey 2',response.content.decode())
-
 
 class ItemModelTest(TestCase):
 	def test_saving_and_retrieving_items(self):
@@ -80,3 +69,25 @@ class ItemModelTest(TestCase):
 		second_saved_item = saved_items[1]
 		self.assertEqual(first_saved_item.text, 'The first (ever) list item')
 		self.assertEqual(second_saved_item.text, 'Item the second')
+
+class ListViewTest(TestCase):
+	def test_uses_list_template(self):
+		response = self.client.get('/lists/the-only-list-in-the-world/')
+		self.assertTemplateUsed(response, 'list.html')
+
+	def test_display_all_items(self):
+		Item.objects.create(text='itemey 1')
+		Item.objects.create(text='itemey 2')
+
+		# Instead of calling the view function directly, we use the Django
+		# test client, which is an attribute of Django TtestCase called
+		# self.client. We tell it to .get the URL we're testing - it's 
+		# actually a very similar API to the one that Selenium uses. 
+		response = self.client.get('/lists/the-only-list-in-the-world/')
+
+		# Instead of using the slightly annoying 
+		# asserIn/response.content.decode() dance, Django provides the
+		# assertContains method which knows how to deal with responses 
+		# and the bytes of their content
+		self.assertContains(response,'itemey 1')
+		self.assertContains(response,'itemey 2')
