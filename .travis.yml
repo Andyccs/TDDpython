@@ -10,3 +10,6 @@ script:
 
 after_success:
   - coveralls
+
+addons:
+  firefox: "17.0"
